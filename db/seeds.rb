@@ -6,5 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-user = User.create(name: "arye", email: "aryedov.e@gmail.com", password: "password")
-list = List.new(name: "Shopping")
+developer_user = User.create(name: "arye", email: "aryedov.e@gmail.com", password: "password")
+shopping_list = List.create(name: "Shopping List")
+apple_item = Item.create(name: "Apples", list: shopping_list)
+orange_item = Item.create(name: "Oranges", list: shopping_list)
+grape_item = Item.create(name: "Grapes", list: shopping_list)
