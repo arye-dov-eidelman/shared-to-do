@@ -7,3 +7,4 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 user = User.create(name: "arye", email: "aryedov.e@gmail.com", password: "password")
+list = List.new(name: "Shopping")
