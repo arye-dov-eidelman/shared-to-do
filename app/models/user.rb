@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
+  has_many :lists_users
+  has_many :lists, through: :lists_users
 
   validates :name, :email, :password, presence: true
 
