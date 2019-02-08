@@ -1,0 +1,34 @@
+<%= link_to 'Back to all lists', lists_path %>
+<br/>
+<br/>
+<%= form_for @list do |f| %>
+  <div class="list-name">
+    <%= f.label :list_name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <br/>
+
+  <%= f.fields_for :items do |item| %>
+    <div class="list-item">
+      <span class="checked">
+        <%= item.check_box :checked %>
+      </span>
+      <span class="name">
+        <%= item.text_field :name %>
+      </span>
+    </div>
+  <% end %>
+
+  <br/>
+  
+  <div class="list-submit">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<br/>
+
+<% if @list.persisted? %>
+  <%= link_to "Delete #{@list.name} List", @list, method: :delete %>
+<% end %>

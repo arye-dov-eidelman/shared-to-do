@@ -1,0 +1,12 @@
+
+<h1>Lists</h1>
+<% @lists.each do |list| %>
+  <div class="list">
+    <%= link_to("#{list.name} List", list) %>
+    <%= link_to "Delete", list, method: :delete, data: {
+      confirm: "Are you sure you want to delete the #{list.name}?"
+    } %>
+  </div>
+<% end %>
+<br/>
+<%= link_to 'New List', new_list_path %>
