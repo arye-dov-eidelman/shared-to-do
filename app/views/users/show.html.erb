@@ -1,0 +1,24 @@
+
+
+<%#= link_to 'Back to all lists', lists_path %>
+<br/>
+<br/>
+<div class="user-name">
+  Name: <%= @user.name %>
+</div>
+<br/>
+
+<div class="user-email">
+  Email: <%= @user.email %>
+</div>
+<br/>
+
+
+<% if @user.persisted? %>
+  <%= link_to "Edit", edit_user_path(@user) %>
+  <br/>
+  <br/>
+
+  <%= render partial: 'delete_link', locals: {user: @user} %>
+  <br/>
+<% end %>

@@ -40,10 +40,7 @@ class ListsController < ApplicationController
   private
 
   def find_list
-    # not_found if  params[:id].nil?
     not_found unless @list = List.find_by(id: params[:id])
-    # byebug
-    # puts "Is the list the correct one: #{@list.id == params[:id]}"
   end
 
   def add_empty_list_items

@@ -1,0 +1,33 @@
+<%#= link_to 'Back to all lists', lists_path %>
+<br/>
+<br/>
+<%= form_for @user do |f| %>
+  <div class="user-name">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+  <br/>
+
+  <div class="user-email">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true %>
+  </div>
+  <br/>
+
+  <div class="user-password">
+    <%= f.label :password %>
+    <%= f.password_field :password, required: true %>
+  </div>
+  <br/>
+  
+  <div class="user-submit">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<br/>
+
+<% if @user.persisted? %>
+  <%= render partial: 'delete_link', locals: {user: @user} %>
+  <br/>
+<% end %>
