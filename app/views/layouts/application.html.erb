@@ -10,6 +10,16 @@
   </head>
 
   <body>
+    <header>
+      <nav>
+        <% if @user %>
+          <%= link_to "Log Out", sessions_path, method: :delete %>
+        <% else %>
+          <%= link_to "Log In", new_sessions_path %>
+        <% end %>
+      </nav>
+      <br>
+    </header>
     <%= yield %>
   </body>
 </html>

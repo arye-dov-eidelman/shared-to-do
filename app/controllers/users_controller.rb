@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :find_user, only: [:show, :edit, :update, :destroy]
+  before_action :require_logged_in_user, except: [:new, :create]
 
   def index
     @users = User.all
@@ -12,10 +12,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      # byebug
+      log_in!
       redirect_to @user
     else
-      # byebug
       render :new
     end
   end
@@ -27,8 +26,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.update(user_params)
-    redirect_to @user
+    if @user.update(user_params)
+      redirect_to @user
+    else
+      redirect_to edit_path(@user)
+    end
   end
 
   def destroy
@@ -37,10 +39,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def find_user
-    not_found unless @user = User.find_by(id: params[:id])
-  end
 
   def user_params
     params.require(:user).permit(:name, :email, :password)
