@@ -3,8 +3,6 @@ class List < ApplicationRecord
   has_many :lists_users, dependent: :destroy
   has_many :users, through: :lists_users
   validates :name, presence: true, length: { in: 1..100 }
-  
-  # accepts_nested_attributes_for :items
 
   def items_attributes=(items_attributes)
     self.items.destroy_all
@@ -14,4 +12,7 @@ class List < ApplicationRecord
       end
     end
   end
+
+  scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
+  scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
 end
