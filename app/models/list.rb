@@ -30,4 +30,16 @@ class List < ApplicationRecord
   def shared?
     lists_users.count > 1
   end
+
+  def share_with(users)
+    users.map{ |user| lists_users.create(user: user, is_owner: false) }
+  end
+
+  def unshare(users)
+    lists_users.where(user: users, is_owner: false).destroy_all
+  end
+
+  def unshare_all
+    lists_users.where(is_owner: false).destroy_all
+  end
 end
