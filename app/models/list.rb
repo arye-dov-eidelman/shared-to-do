@@ -18,4 +18,16 @@ class List < ApplicationRecord
 
   scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
+
+  def owner
+    lists_users.find_by(is_owner: true).user
+  end
+
+  def collaborators
+    lists_users.is_not_owner.map(&:user)
+  end
+
+  def shared?
+    lists_users.count > 1
+  end
 end
