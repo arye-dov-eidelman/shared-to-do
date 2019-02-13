@@ -13,6 +13,9 @@ class List < ApplicationRecord
     end
   end
 
+  scope :shared,     -> { where(id: ListsUser.shared_list_ids) }
+  scope :non_shared, -> { where(id: ListsUser.non_shared_list_ids) }
+
   scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
 end

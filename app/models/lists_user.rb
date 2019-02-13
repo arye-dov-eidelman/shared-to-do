@@ -9,4 +9,12 @@ class ListsUser < ApplicationRecord
 
   scope :is_owner, -> { where(is_owner: true) }
   scope :is_not_owner, -> { where(is_owner: false) }
+
+  scope :shared_list_ids, -> {
+    group(:list_id).having("COUNT(list_id) > 1").pluck(:list_id)
+  }
+
+  scope :non_shared_list_ids, -> {
+    group(:list_id).having("COUNT(list_id) = 1").pluck(:list_id)
+  }
 end
