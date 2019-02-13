@@ -1,8 +1,9 @@
 class ListsController < ApplicationController
+  before_action :require_logged_in_user
   before_action :find_list, only: [:show, :edit, :update, :destroy]
 
   def index
-    @lists = List.all
+    @lists = @user.lists
   end
 
   def new
@@ -13,6 +14,7 @@ class ListsController < ApplicationController
   def create
     @list = List.new(list_params)
     if @list.save
+      @list.lists_users.create(user: @user, is_owner: true)
       redirect_to @list
     else
       redirect_to new_list_path
@@ -40,10 +42,8 @@ class ListsController < ApplicationController
   private
 
   def find_list
-    # not_found if  params[:id].nil?
-    not_found unless @list = List.find_by(id: params[:id])
-    # byebug
-    # puts "Is the list the correct one: #{@list.id == params[:id]}"
+    not_found unless (@list = List.find_by(id: params[:id])) &&
+                     ListsUser.exists?(user: @user, list_id: params[:id])
   end
 
   def add_empty_list_items

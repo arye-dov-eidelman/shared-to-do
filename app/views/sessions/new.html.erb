@@ -1,0 +1,19 @@
+<%= form_with url: sessions_path do |f| %>
+  <div class="user-email">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true %>
+  </div>
+  <br/>
+
+  <div class="user-password">
+    <%= f.label :password %>
+    <%= f.password_field :password, required: true %>
+  </div>
+  <br/>
+  
+  <div class="user-submit">
+    <%= f.submit "Log In" %>
+  </div>
+<% end %>
+
+<br/>
