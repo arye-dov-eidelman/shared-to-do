@@ -16,8 +16,4 @@ class User < ApplicationRecord
   def not_owned_lists
     lists.not_owned_by(self)
   end
-
-  def accesseable_lists
-    lists.accesseable_by(self)
-  end
 end

@@ -18,7 +18,11 @@ class List < ApplicationRecord
 
   scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
-  scope :accesseable_by, ->(user) { where(id: lists_users.where(user_id: user) }
+  
+
+  def accesseable_by?(user)
+    lists_users.exists(user_id: user)
+  end
 
   def list_owner
     lists_users.find_by(is_owner: true)
@@ -56,7 +60,7 @@ class List < ApplicationRecord
     users.map{ |user| lists_users.create(user: user, is_owner: false) }
   end
 
-  def unshare(users)
+  def unshare_with(users)
     lists_users.where(user: users, is_owner: false).destroy_all
   end
 
