@@ -21,7 +21,7 @@ class List < ApplicationRecord
   
 
   def accesseable_by?(user)
-    lists_users.exists(user_id: user)
+    lists_users.exists?(user: user)
   end
 
   def list_owner

@@ -42,7 +42,7 @@ class ListsController < ApplicationController
 
   def find_list
     not_found unless @list = List.find_by(id: params[:id])
-    not_found unless @list.lists_users.exists?(user: @user)
+    not_found unless @list.accesseable_by?(@user)
   end
 
   def add_empty_list_items
