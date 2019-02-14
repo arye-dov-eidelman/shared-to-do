@@ -1,0 +1,12 @@
+
+<h1>Lists</h1>
+<% @list.users.each do |user| %>
+  <div class="user">
+    <%= link_to user.name, user %>
+    <%= link_to "Revoke access", user, method: :delete, data: {
+      confirm: "Are you sure you want to revoke access from #{user.name} to #{@list.name} list?"
+    } %>
+  </div>
+<% end %>
+<br/>
+<%= link_to 'Share List', new_list_user_path(@list) %>

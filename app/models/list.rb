@@ -20,7 +20,7 @@ class List < ApplicationRecord
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
   
 
-  def accesseable_by?(user)
+  def accessible_by?(user)
     lists_users.exists?(user: user)
   end
 

@@ -1,0 +1,2 @@
+module Lists::UsersHelper
+end
