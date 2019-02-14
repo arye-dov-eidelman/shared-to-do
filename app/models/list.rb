@@ -19,8 +19,28 @@ class List < ApplicationRecord
   scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
 
+  def list_owner
+    lists_users.find_by(is_owner: true)
+  end
+
   def owner
-    lists_users.find_by(is_owner: true).user
+    list_owner.user
+  end
+
+  def owner=(user)
+    # save if unpersisted to ensure that the list_user can be created with a valid list_id
+    save unless persisted?
+
+    ListsUser.transaction do
+      # if i have an owner change them to a collaborator 
+      list_owner&.update(is_owner: false)
+
+      # find or build the new_list_owner
+      new_list_owner = lists_users.find_by(user: user) || lists_users.build(user: user)
+
+      # update (or create) the new_list_owner to be the owner
+      new_list_owner.update(is_owner: true)
+    end
   end
 
   def collaborators
