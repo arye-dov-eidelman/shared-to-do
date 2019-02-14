@@ -18,6 +18,7 @@ class List < ApplicationRecord
 
   scope :owned_by, ->(user) { where(id: ListsUser.where(user: user).is_owner) }
   scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
+  scope :accesseable_by, ->(user) { where(id: lists_users.where(user_id: user) }
 
   def list_owner
     lists_users.find_by(is_owner: true)
