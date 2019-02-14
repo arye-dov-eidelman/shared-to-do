@@ -11,10 +11,18 @@ class Lists::UsersController < ApplicationController
   end
 
   def index
-    # byebug
+
   end
 
   def destroy
+    not_found unless @other_user = @list.users.find_by(id: params[:id])
+    if @other_user == @list.owner
+      # connot remove owner
+    else
+      @list.unshare_with(@other_user)
+    end
+    
+    redirect_to list_users_path(@list)
 
   end
 

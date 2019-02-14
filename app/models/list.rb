@@ -56,12 +56,12 @@ class List < ApplicationRecord
     lists_users.count > 1
   end
 
-  def share_with(users)
-    users.map{ |user| lists_users.create(user: user, is_owner: false) }
+  def share_with(user)
+    lists_users.create(user: user, is_owner: false)
   end
 
-  def unshare_with(users)
-    lists_users.where(user: users, is_owner: false).destroy_all
+  def unshare_with(user)
+    lists_users.find_by(user: user, is_owner: false).destroy
   end
 
   def unshare_all
