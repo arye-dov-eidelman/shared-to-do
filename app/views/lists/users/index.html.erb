@@ -1,5 +1,9 @@
+<%= link_to "Back to #{@list.name} list", list_path(@list) %>
+<br/>
+<br/>
 
-<h1>Lists</h1>
+<h1>List collaborators</h1>
+
 <% @list.users.each do |user| %>
   <div class="user">
     <%= link_to user.name, user %>

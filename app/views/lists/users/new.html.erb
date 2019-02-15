@@ -6,8 +6,9 @@
 <%= form_for @lists_user, url: list_users_path do |f| %>
 
   <%= f.label :user_id, "Grant access to view, edit, share further or delete #{@list.name} with:" %>
-  <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
+  <br/>
 
+  <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
   <br/>
   
   <div class="list-submit">
