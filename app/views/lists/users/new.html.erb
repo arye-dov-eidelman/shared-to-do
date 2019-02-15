@@ -1,1 +1,18 @@
-<%= render partial: 'form' %>
+<%= link_to "Back to #{@list.name} lists collaborators", list_users_path(@list) %>
+<br/>
+<br/>
+
+<%# "undefined method `lists_users_path'" if the url is not specified %>
+<%= form_for @lists_user, url: list_users_path do |f| %>
+
+  <%= f.label :user_id, "Grant access to view, edit, share further or delete #{@list.name} with:" %>
+  <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
+
+  <br/>
+  
+  <div class="list-submit">
+    <%= f.submit "Share" %>
+  </div>
+<% end %>
+
+<br/>

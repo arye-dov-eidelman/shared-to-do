@@ -16,4 +16,8 @@ class User < ApplicationRecord
   def not_owned_lists
     lists.not_owned_by(self)
   end
+
+  def email_and_name 
+    "#{name} (#{email})"
+  end
 end
