@@ -12,9 +12,8 @@ class ListsController < ApplicationController
   end
 
   def create
-    @list = List.new(list_params)
-    if @list.save
-      @list.lists_users.create(user: @user, is_owner: true)
+    @list = List.new(list_params.merge({owner: @user}))
+    if @list.persisted?
       redirect_to @list
     else
       redirect_to new_list_path
@@ -42,8 +41,8 @@ class ListsController < ApplicationController
   private
 
   def find_list
-    not_found unless (@list = List.find_by(id: params[:id])) &&
-                     ListsUser.exists?(user: @user, list_id: params[:id])
+    not_found unless @list = List.find_by(id: params[:id])
+    not_found unless @list.accessible_by?(@user)
   end
 
   def add_empty_list_items

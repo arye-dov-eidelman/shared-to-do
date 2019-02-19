@@ -1,0 +1,20 @@
+<%= link_to "Back to #{@list.name} list", list_path(@list) %>
+<br/>
+<br/>
+
+<h1>List collaborators</h1>
+
+<% @list.users.each do |user| %>
+  <div class="user">
+    <%= link_to user.name, user %>
+    <% if user == @list.owner %>
+      <span class="label label-owner">List Owner</span>
+    <% else %>
+      <%= link_to "Revoke access", list_user_path(@list, user), method: :delete, data: {
+        confirm: "Are you sure you want to revoke access from #{user.name} to #{@list.name} list?"
+      } %>
+    <% end %>
+  </div>
+<% end %>
+<br/>
+<%= link_to 'Share List', new_list_user_path(@list) %>
