@@ -12,10 +12,11 @@
   <body>
     <header>
       <nav>
-        <% if @user %>
+        <% if @logged_in %>
           <%= link_to "Log Out", sessions_path, method: :delete %>
         <% else %>
           <%= link_to "Log In", new_sessions_path %>
+          <%= link_to "Sign Up", new_user_path %>
         <% end %>
       </nav>
       <br>

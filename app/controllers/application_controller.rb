@@ -20,8 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    session[:user_id].kind_of?(Integer) &&
-    @user = User.find_by(id: session[:user_id])
+    @logged_in ||= session[:user_id].kind_of?(Integer) && User.exists?(id: session[:user_id])
   end
 
   def logged_out?
@@ -29,8 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    if logged_in?
-      return @user
+    if logged_in? && user = User.find_by(id: session[:user_id])
+      return @user = user
     else
       return false
     end
