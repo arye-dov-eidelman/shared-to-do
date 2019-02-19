@@ -4,7 +4,21 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if @user = User.find_by(email: session_params[:email])
+    if omniauth?
+      if @user = User.find_by(email: omniauth_info['email'])
+        log_in!
+        redirect_to lists_path
+      elsif @user = User.new(email: omniauth_info['email'], name: omniauth_info['name'])
+        if @user.save
+          log_in!
+          redirect_to lists_path
+        else
+          redirect_to new_sessions_path
+        end
+      else
+        redirect_to new_sessions_path
+      end
+    elsif @user = User.find_by(email: session_params[:email])
       if @user.authenticate(session_params[:password])
         log_in!
         redirect_to lists_path
@@ -21,7 +35,17 @@ class SessionsController < ApplicationController
     redirect_to new_sessions_path
   end
 
+  private
+
   def session_params
     params.permit(:email, :password)
+  end
+
+  def omniauth?
+    !!request.env['omniauth.auth']
+  end
+
+  def omniauth_info
+    request.env['omniauth.auth']['info']
   end
 end
