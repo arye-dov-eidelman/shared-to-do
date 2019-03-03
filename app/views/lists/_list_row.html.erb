@@ -1,6 +1,13 @@
  <div class="list">
     <%= link_to "#{list.name} List", list_path(list) %>
+
     <%= link_to "Delete", list, method: :delete, data: {
       confirm: "Are you sure you want to delete the #{list.name} list?"
     } %>
+
+    <% if list.shared? %>
+      <i class="material-icons">people</i>
+    <% else %>
+      <i class="material-icons">lock</i>
+    <% end %>
   </div>

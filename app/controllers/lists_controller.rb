@@ -3,7 +3,11 @@ class ListsController < ApplicationController
   before_action :find_list, only: [:show, :edit, :update, :destroy]
 
   def index
-    @lists = @user.lists
+    @my_lists = @user.owned_lists
+    ap @my_lists
+    @not_my_lists = @user.not_owned_lists
+
+
   end
 
   def new
