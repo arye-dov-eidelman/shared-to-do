@@ -10,10 +10,13 @@
 
 
 <% if @user.persisted? %>
-  <%= link_to "Edit", edit_user_path(@user) %>
-  <br/>
-  <br/>
-
-  <%= render partial: 'delete_link', locals: {user: @user} %>
-  <br/>
+  <div>
+    <%= link_to "Edit Account Details", edit_user_path(@user) %>
+  </div>
+  <br>
+  <div>
+    <%= link_to "Delete Your Account", @user, method: :delete,
+      data: {confirm: "Are you sure you want to delete your account?"}
+    %>
+  </div>
 <% end %>

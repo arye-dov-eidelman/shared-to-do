@@ -18,7 +18,7 @@
         <% if @logged_in %>
           <%= link_to "Log Out", sessions_path, method: :delete %>
           <%= link_to "Lists", lists_path %>
-          <%= link_to 'Account Settings', edit_user_path(@user) %>
+          <%= link_to "Account", user_path(@user) %>
         <% else %>
           <%= link_to "Log In", new_sessions_path %>
           <%= link_to "Sign Up", new_user_path %>

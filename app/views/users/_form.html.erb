@@ -22,12 +22,3 @@
     <%= f.submit submit_text %>
   </div>
 <% end %>
-
-<br/>
-
-<% if @user.persisted? %>
-  <%= render partial: 'delete_link', locals: {user: @user} %>
-  <br/>
-<% else %>
-  <%= link_to('Sign Up with Facebook!', '/auth/facebook') %>
-<% end %>
