@@ -1,11 +1,8 @@
-<%= link_to 'Back to all lists', lists_path %>
-<br/>
-<br/>
-
 <% if @list.persisted? %>
-  <%= link_to "Lists Collaborators", list_users_path(@list) %>
+  <div>
+    <%= link_to "Lists Collaborators", list_users_path(@list) %>
+  </div>
 <% end %>
-<br/>
 <br/>
 
 <%= form_for @list do |f| %>
