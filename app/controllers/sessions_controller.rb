@@ -8,15 +8,19 @@ class SessionsController < ApplicationController
       if @user = User.find_by(email: omniauth_info['email'])
         log_in!
         redirect_to lists_path
-      elsif @user = User.new(email: omniauth_info['email'], name: omniauth_info['name'])
+      else
+        @user = User.new(
+          email: omniauth_info['email'],
+          name: omniauth_info['name'],
+          password: SecureRandom.hex(32)
+        )
+        
         if @user.save
           log_in!
           redirect_to lists_path
         else
           redirect_to new_sessions_path
         end
-      else
-        redirect_to new_sessions_path
       end
     elsif @user = User.find_by(email: session_params[:email])
       if @user.authenticate(session_params[:password])
