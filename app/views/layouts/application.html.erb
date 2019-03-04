@@ -19,15 +19,18 @@
       </h1>
       <nav>
         <% if @logged_in %>
-          <%= link_to "Log Out", sessions_path, method: :delete %>
           <%= link_to "Lists", lists_path %>
+          &nbsp;
           <%= link_to "Account", user_path(@user) %>
+          &nbsp;
+          <%= link_to "Log Out", sessions_path, method: :delete %>
         <% else %>
           <%= link_to "Log In", new_sessions_path %>
+          &nbsp;
           <%= link_to "Sign Up", new_user_path %>
         <% end %>
       </nav>
-      <br>
+      <hr>
     </header>
     <%= yield %>
   </body>
