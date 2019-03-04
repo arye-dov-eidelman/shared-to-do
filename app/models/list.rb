@@ -8,7 +8,7 @@ class List < ApplicationRecord
     self.items.destroy_all
     items_attributes.each do |i, item_attributes|
       if item_attributes[:name].present?
-        self.items.build(item_attributes)
+        self.items.build(item_attributes).save
       end
     end
   end
