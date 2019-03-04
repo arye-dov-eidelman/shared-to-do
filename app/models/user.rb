@@ -10,11 +10,14 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   def owned_lists
-    lists.owned_by(self)
+    lists_users.where(is_owner: true).map(&:list).compact
+    # lists.owned_by(self)
   end
 
   def not_owned_lists
-    lists.not_owned_by(self)
+    # lists.not_owned_by(self)
+    # lists.where.not(id: List.owned_by(self.id))
+    lists_users.where(is_owner: false).map(&:list).compact    
   end
 
   def email_and_name 
