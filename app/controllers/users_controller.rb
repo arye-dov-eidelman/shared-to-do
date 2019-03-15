@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       log_in!
-      WelcomeMailer.new.welcome_email(@user)
+      Email.new_welcome_email(@user).send
       redirect_to @user
     else
       render :new
