@@ -10,6 +10,14 @@
 
   <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
   <br/>
+  <br/>
+
+  <%= f.label :share_message %>
+  <br/>
+
+  <%= f.text_field :share_message %>
+  <br/>
+  <br/>
   
   <div class="list-submit">
     <%= f.submit "Share" %>

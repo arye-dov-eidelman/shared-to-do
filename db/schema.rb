@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_07_164104) do
+ActiveRecord::Schema.define(version: 2019_03_17_141019) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2019_02_07_164104) do
     t.integer "is_owner"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "share_message"
   end
 
   create_table "users", force: :cascade do |t|

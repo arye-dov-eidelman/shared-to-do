@@ -7,9 +7,11 @@ class Lists::UsersController < ApplicationController
   end
 
   def create
-    @list.share_with(User.find_by(id: list_user_params[:user_id]))
-    # @lists_user = @list.lists_users.build(list_user_id_param)
-    # byebug
+    @list.share(
+      with: User.find_by(id: list_user_params[:user_id]),
+      by: @user,
+      message: list_user_params[:share_message]
+    )
     
     redirect_to list_users_path(@list)
   end

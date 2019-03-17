@@ -27,5 +27,5 @@ to do:
 
 * ✔ Sign up with facebook (generate random password)
 * show validation errors
-* add user submittance data to the share list page
+* ✔  add user submittance data to the share list page
 * update [readme](./README.md)

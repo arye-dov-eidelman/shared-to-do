@@ -52,12 +52,34 @@ class List < ApplicationRecord
     lists_users.is_not_owner.map(&:user)
   end
 
-  def shared?
-    lists_users.count > 1
+  def share(options={})
+    # options include
+    # - with    - the person it's being shared with
+    # - by      - the person sharing the list (defaults to list owner)
+    # - message - a message to send to the person it's being shared with
+    #
+    # Example:
+    # list.share(
+    #   with: person_2,
+    #   by: logged_in_user,
+    #   message: "Here is a list of things to do before _____ trip. Pease you take care of ___ this week. Make sure to check it off when you're done."
+    # )
+
+    unless options[:with]
+      puts "Attempted to share a list without specifeing with whom"
+      return false
+    end
+    options[:by] = owner unless options[:by]
+    options[:message] = "#{options[:by]} Shared #{name} list with you" unless options[:message]
+    lists_users.create(user: options[:with], is_owner: false, share_message: options[:message])
   end
 
-  def share_with(user)
-    lists_users.create(user: user, is_owner: false)
+  def shared?(options={})
+    if options[:with]
+      lists_users.exists?(user: options[:with])
+    else
+      lists_users.exists?
+    end
   end
 
   def unshare_with(user)
@@ -66,5 +88,9 @@ class List < ApplicationRecord
 
   def unshare_all
     lists_users.where(is_owner: false).destroy_all
+  end
+
+  def share_message_for(user)
+    lists_users.find_by(user: user).share_message
   end
 end
