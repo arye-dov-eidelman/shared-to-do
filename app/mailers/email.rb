@@ -1,4 +1,5 @@
-# This is not the using (rails) ActionMail
+# Take note: This is not the using (rails) ActionMail
+#
 # Email provides a wrapper for the mailgun api
 # and methods for creating individual emails
 
