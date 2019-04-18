@@ -4,12 +4,13 @@ class List < ApplicationRecord
   has_many :users, through: :lists_users
   validates :name, presence: true, length: { in: 1..100 }
 
-  def items_attributes=(items_attributes)
-    self.items.destroy_all
-    items_attributes.each do |i, item_attributes|
-      if item_attributes[:name].present?
-        self.items.build(item_attributes).save
-      end
+  accepts_nested_attributes_for :items
+
+  before_validation :delete_empty_items
+
+  def delete_empty_items
+    items.each do |item|
+      item.destroy if item.name.blank?
     end
   end
 

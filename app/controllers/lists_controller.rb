@@ -51,6 +51,6 @@ class ListsController < ApplicationController
   end
 
   def list_params
-    params.require(:list).permit(:name, items_attributes: [:name, :checked])
+    params.require(:list).permit(:name, items_attributes: [:id, :name, :checked])
   end
 end
