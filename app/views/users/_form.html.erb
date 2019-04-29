@@ -1,24 +1,28 @@
-<br/>
+<% if @user.errors.present? %>
+  <% @user.errors.full_messages.each do |message| %>
+    <div class="bg-red pa2 ma2">
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
 <%= form_for @user do |f| %>
-  <div class="user-name">
+  <div class="user-name pa2 ma2">
     <%= f.label :name %>
     <%= f.text_field :name, required: true %>
   </div>
-  <br/>
 
-  <div class="user-email">
+  <div class="user-email pa2 ma2">
     <%= f.label :email %>
     <%= f.email_field :email, required: true %>
   </div>
-  <br/>
 
-  <div class="user-password">
+  <div class="user-password pa2 ma2">
     <%= f.label :password %>
     <%= f.password_field :password, required: true %>
   </div>
-  <br/>
   
-  <div class="user-submit">
+  <div class="user-submit pa2 ma2">
     <%= f.submit submit_text %>
   </div>
 <% end %>

@@ -1,28 +1,33 @@
+<% if @list.errors.present? %>
+  <% @list.errors.full_messages.each do |message| %>
+    <div class="bg-red pa2 ma2">
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
 <% if @list.persisted? %>
-  <div>
+  <div class="pa2 ma2">
     <%= link_to "Lists Collaborators", list_users_path(@list) %>
   </div>
 <% end %>
-<br/>
 
 <% if @list.shared?(with: @user) %>
-  <%= @list.owner.name %> shared this list with you with the following message:
-  <br>
-  <%= @list.share_message_for(@user) %>
-  <br>
-  <br>
+  <div class="pa2 ma2">
+    <%= @list.owner.name %> shared this list with you with the following message:
+    <br>
+    <%= @list.share_message_for(@user) %>
+  </div>
 <% end %>
 
 <%= form_for @list do |f| %>
-  <div class="list-name">
+  <div class="list-name pa2 ma2">
     <%= f.label :list_name %>
     <%= f.text_field :name, required: true %>
   </div>
 
-  <br/>
-
   <%= f.fields_for :items do |item| %>
-    <div class="list-item">
+    <div class="list-item ph2 mh2 pv1 mv1">
       <span class="checked">
         <%= item.check_box :checked %>
       </span>
@@ -31,18 +36,16 @@
       </span>
     </div>
   <% end %>
-
-  <br/>
   
-  <div class="list-submit">
+  <div class="list-submit pa2 ma2">
     <%= f.submit %>
   </div>
 <% end %>
 
-<br/>
-
 <% if @list.persisted? %>
-  <%= link_to "Delete #{@list.name} List", @list, method: :delete, data: {
-    confirm: "Are you sure you want to delete the #{@list.name} list?"
-  } %>
+  <div class="pa2 ma2">
+    <%= link_to "Delete #{@list.name} List", @list, method: :delete, data: {
+      confirm: "Are you sure you want to delete the #{@list.name} list?"
+    } %>
+  </div>
 <% end %>

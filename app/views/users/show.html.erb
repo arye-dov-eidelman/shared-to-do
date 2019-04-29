@@ -1,20 +1,18 @@
-<div class="user-name">
+<div class="user-name pa2 ma2">
   Name: <%= @user.name %>
 </div>
-<br/>
 
-<div class="user-email">
+<div class="user-email pa2 ma2">
   Email: <%= @user.email %>
 </div>
-<br/>
 
 
 <% if @user.persisted? %>
-  <div>
+  <div class="pa2 ma2">
     <%= link_to "Edit Account Details", edit_user_path(@user) %>
   </div>
-  <br>
-  <div>
+
+  <div class="pa2 ma2">
     <%= link_to "Delete Your Account", @user, method: :delete,
       data: {confirm: "Are you sure you want to delete your account?"}
     %>

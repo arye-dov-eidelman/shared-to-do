@@ -27,10 +27,14 @@ class SessionsController < ApplicationController
         log_in!
         redirect_to lists_path
       else
-        redirect_to new_sessions_path
+        @email = session_params[:email]
+        flash[:notice] =  "The Email or Password is incorrect"
+        render :new
       end
     else
-      redirect_to new_sessions_path
+      @email = session_params[:email]
+      flash[:notice] =  "The Email or Password is incorrect"
+      render :new
     end
   end
 

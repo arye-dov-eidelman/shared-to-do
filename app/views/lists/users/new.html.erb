@@ -1,25 +1,34 @@
-<%= link_to "Back to #{@list.name} lists collaborators", list_users_path(@list) %>
-<br/>
-<br/>
+<div class="pa2 ma2">
+  <%= link_to "Back to #{@list.name} lists collaborators", list_users_path(@list) %>
+</div>
+
+<% if @lists_user.errors.present? %>
+  <div class="bg-red pa2 ma2">
+    The list wasn't shared because:
+  </div>
+  <% @lists_user.errors.full_messages.each do |message| %>
+    <div class="bg-red pa2 ma2 ml3">
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
 
 <%# "undefined method `lists_users_path'" if the url is not specified %>
 <%= form_for @lists_user, url: list_users_path do |f| %>
 
-  <%= f.label :user_id, "Grant access to view, edit, share further or delete #{@list.name} with:" %>
-  <br/>
+  <div class="pa2 ma2">
+    <%= f.label :user_id, "Grant access to view, edit, share further or delete #{@list.name} with:" %>
+    <br>
+    <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
+  </div>
 
-  <%= f.collection_select :user_id, User.all, :id, :email_and_name %>
-  <br/>
-  <br/>
-
-  <%= f.label :share_message %>
-  <br/>
-
-  <%= f.text_field :share_message %>
-  <br/>
-  <br/>
+  <div class="pa2 ma2">
+    <%= f.label :share_message %>
+    <br>
+    <%= f.text_field :share_message %>
+  </div>
   
-  <div class="list-submit">
+  <div class="list-submit pa2 ma2">
     <%= f.submit "Share" %>
   </div>
 <% end %>

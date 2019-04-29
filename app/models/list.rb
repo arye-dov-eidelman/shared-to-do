@@ -67,12 +67,14 @@ class List < ApplicationRecord
     # )
 
     unless options[:with]
-      puts "Attempted to share a list without specifeing with whom"
-      return false
+      return lists_users.build(user: nil, is_owner: false, share_message: options[:message])
     end
+
     options[:by] = owner unless options[:by]
-    options[:message] = "#{options[:by]} Shared #{name} list with you" unless options[:message]
-    lists_users.create(user: options[:with], is_owner: false, share_message: options[:message])
+    options[:message] = "#{options[:by].name} Shared #{name} list with you" unless options[:message]
+    lists_user = lists_users.build(user: options[:with], is_owner: false, share_message: options[:message])
+    lists_user.save
+    lists_user
   end
 
   def shared?(options={})

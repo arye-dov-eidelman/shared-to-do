@@ -17,7 +17,7 @@ class ListsController < ApplicationController
     if @list.persisted?
       redirect_to @list
     else
-      redirect_to new_list_path
+      render :edit
     end
   end
 
@@ -30,8 +30,11 @@ class ListsController < ApplicationController
   end
 
   def update
-    @list.update(list_params)
-    redirect_to @list
+    if @list.update(list_params)
+      redirect_to @list
+    else
+      render :edit
+    end
   end
 
   def destroy

@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to @user
     else
-      redirect_to edit_path(@user)
+      render :new
     end
   end
 

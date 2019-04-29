@@ -1,22 +1,23 @@
-<br/>
-<%= form_with url: sessions_path do |f| %>
-  <div class="user-email">
-    <%= f.label :email %>
-    <%= f.email_field :email, required: true %>
-  </div>
-  <br/>
+<% if notice %>
+  <p id="notice" class="bg-red pa2 ma2"><%= notice %></p>
+<% end %>
 
-  <div class="user-password">
+<%= form_with url: sessions_path, local: true do |f| %>
+  <div class="user-email pa2 ma2">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true, value: @email %>
+  </div>
+
+  <div class="user-password pa2 ma2">
     <%= f.label :password %>
     <%= f.password_field :password, required: true %>
   </div>
-  <br/>
   
-  <div class="user-submit">
+  <div class="user-submit pa2 ma2">
     <%= f.submit "Log In" %>
   </div>
 <% end %>
 
 <br/>
 
-<%= link_to('Log In with Facebook!', '/auth/facebook') %>
+<%= link_to('Log In with Facebook!', '/auth/facebook', class: "pa2 ma2") %>

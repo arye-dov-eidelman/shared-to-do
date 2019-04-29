@@ -2,10 +2,13 @@ class ListsUser < ApplicationRecord
   belongs_to :list
   belongs_to :user
 
-  validates :list_id, :user_id, :is_owner, presence: true
+  validates :list_id, :is_owner, presence: true
+  validates :user, presence: { message: "Attempted to share a list without specifeing with whom" }
 
   # validates that there are no double user list relations
-  validates :user_id, uniqueness: {scope: :list_id}
+  validates :user_id, uniqueness: { scope: :list_id, message:
+    ->(object, data) { "#{object.user.name} already has access to this list"}
+  }
 
   scope :is_owner, -> { where(is_owner: true) }
   scope :is_not_owner, -> { where(is_owner: false) }
