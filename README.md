@@ -1,31 +1,28 @@
-# README
+# Sharable To Do lists App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Check list app where you can share access to Check lists with others
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+```bash
+# clone this repository
+git clone git@github.com:arye-dov-eidelman/shared-to-do.git
 
-* System dependencies
+# navigate into the directory
+cd shared-to-do
 
-* Configuration
+# keep rvm calm
+rvm install "ruby-2.3.8"
+rvm use 2.3.8
 
-* Database creation
+# bundle gems
+gem install bundler
+bundle
 
-* Database initialization
+# Setup the SQL database
+rails db:create
+rails db:migrate
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-to do:
-
-* ✔ Sign up with facebook (generate random password)
-* show validation errors
-* ✔  add user submittance data to the share list page
-* update [readme](./README.md)
+# start the server
+rails s
+```
