@@ -5,12 +5,6 @@
   <%= link_to 'New List', new_list_path %>
 </div>
 
-<h3 class="pv1 ph2 mh2">My Lists</h3>
-<% @my_lists.each do |list| %>
-   <%= render partial: "list_row", locals: {list: list} %>
-<% end %>
-
-<h3 class="pv1 ph2 mh2">Others's Lists</h3>
-<% @not_my_lists.each do |list| %>
+<% @lists.each do |list| %>
    <%= render partial: "list_row", locals: {list: list} %>
 <% end %>

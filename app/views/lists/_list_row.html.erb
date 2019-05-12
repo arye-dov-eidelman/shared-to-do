@@ -1,13 +1,27 @@
- <div class="list pv1 mv1 ph2 mh2">
-  <%= link_to "#{list.name} List", list_path(list) %>
+ <div class="list flex items-center mh2 mv1 ph2 pv1">
+  <%= link_to(
+    "#{list.name} List",
+    list_path(list),
+    class: "ma2 pa2"
+  ) %>
 
-  <%= link_to "Delete", list, method: :delete, data: {
-    confirm: "Are you sure you want to delete the #{list.name} list?"
-  } %>
+  <%= link_to(
+    list.owner.name,
+    user_path(list.owner),
+    class: "ma2 pa2"
+  ) %>
 
-  <% if list.shared? %>
-    <i class="material-icons">people</i>
-  <% else %>
-    <i class="material-icons">lock</i>
-  <% end %>
+  <%= link_to(
+    "<i class=\"material-icons\">#{list.shared? ? "people" : "lock"}</i>".html_safe,
+    list_users_path(list),
+    class: "ma2 pa2"
+  ) %>
+
+  <%= link_to(
+    '<i class="material-icons">delete</i>'.html_safe,
+    list,
+    method: :delete,
+    class: "ma2 pa2",
+    data: {confirm: "Are you sure you want to delete the #{list.name} list?"}
+  ) %>
 </div>

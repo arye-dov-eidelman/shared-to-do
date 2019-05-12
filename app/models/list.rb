@@ -8,6 +8,7 @@ class List < ApplicationRecord
   accepts_nested_attributes_for :items
 
   before_validation :delete_empty_items
+  before_save :add_owner_to_users
 
   def delete_empty_items
     items.each do |item|
@@ -15,26 +16,22 @@ class List < ApplicationRecord
     end
   end
 
-  scope :shared,     -> { where(id: ListsUser.shared_list_ids) }
-  scope :non_shared, -> { where(id: ListsUser.non_shared_list_ids) }
+  def add_owner_to_users
+    lists_users.find_by(user: owner, list: self) || lists_users.build(user: owner, list: self)
+  end
+
+  # scope :shared,     -> { where(id: ListsUser.shared_list_ids) }
+  # scope :non_shared, -> { where(id: ListsUser.non_shared_list_ids) }
 
   # scope :owned_by, ->(user) { where(owner: user}
   # scope :not_owned_by, ->(user) { where(id: ListsUser.where(user: user).is_not_owner) }
   
 
-  # def accessible_by?(user)
-  #   lists_users.exists?(user: user)
-  # end
+  def accessible_by?(user)
+    lists_users.exists?(user: user) || owner == user
+  end
 
-  # def list_owner
-  #   lists_users.find_by(is_owner: true)
-  # end
-
-  # def owner
-  #   list_owner.user
-  # end
-
-  # def owner=(user)
+  # def transfer_ownership_to=(user)
   #   # save if unpersisted to ensure that the list_user can be created with a valid list_id
   #   save unless persisted?
 
@@ -68,12 +65,12 @@ class List < ApplicationRecord
     # )
 
     unless options[:with]
-      return lists_users.build(user: nil, is_owner: false, share_message: options[:message])
+      return lists_users.build(share_message: options[:message])
     end
 
     options[:by] = owner unless options[:by]
     options[:message] = "#{options[:by].name} Shared #{name} list with you" unless options[:message]
-    lists_user = lists_users.build(user: options[:with], is_owner: false, share_message: options[:message])
+    lists_user = lists_users.build(user: options[:with], share_message: options[:message])
     lists_user.save
     lists_user
   end
@@ -82,16 +79,16 @@ class List < ApplicationRecord
     if options[:with]
       lists_users.exists?(user: options[:with])
     else
-      lists_users.exists?
+      lists_users.count > 1
     end
   end
 
   def unshare_with(user)
-    lists_users.find_by(user: user, is_owner: false).destroy
+    lists_users.find_by(user: user).destroy
   end
 
   def unshare_all
-    lists_users.where(is_owner: false).destroy_all
+    lists_users.destroy_all
   end
 
   def share_message_for(user)

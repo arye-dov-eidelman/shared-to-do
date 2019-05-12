@@ -3,8 +3,7 @@ class ListsController < ApplicationController
   before_action :find_list, only: [:show, :edit, :update, :destroy]
 
   def index
-    @my_lists = @user.owned_lists
-    @not_my_lists = @user.not_owned_lists
+    @lists = @user.lists
   end
 
   def new
@@ -14,7 +13,7 @@ class ListsController < ApplicationController
 
   def create
     @list = List.new(list_params.merge({owner: @user}))
-    if @list.persisted?
+    if @list.save!
       redirect_to @list
     else
       render :edit
