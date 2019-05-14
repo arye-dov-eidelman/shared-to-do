@@ -26,7 +26,7 @@
     <%= f.text_field :name, required: true %>
   </div>
 
-  <%= f.fields_for :items do |item| %>
+  <%= f.fields_for :items, @items do |item| %>
     <div class="list-item ph2 mh2 pv1 mv1">
       <span class="checked">
         <%= item.check_box :checked %>

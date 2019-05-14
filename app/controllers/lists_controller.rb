@@ -49,7 +49,7 @@ class ListsController < ApplicationController
   end
 
   def add_empty_list_items
-    5.times{ @list.items.build }
+    @items = [@list.items.incomplete, 5.times.collect{@list.items.build}, @list.items.complete].flatten
   end
 
   def list_params
