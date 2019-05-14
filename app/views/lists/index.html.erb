@@ -5,6 +5,13 @@
   <%= link_to 'New List', new_list_path %>
 </div>
 
+<%= form_with url: lists_path, method: :get, local: true do |f| %>
+  <div class="pa2 ma2">
+    <%= f.text_field :query, value: @query %>
+    <%= f.submit "Search" %>
+  </div>
+<% end %>
+
 <% @lists.each do |list| %>
    <%= render partial: "list_row", locals: {list: list} %>
 <% end %>

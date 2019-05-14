@@ -3,7 +3,8 @@ class ListsController < ApplicationController
   before_action :find_list, only: [:show, :edit, :update, :destroy]
 
   def index
-    @lists = @user.lists
+    @query = search_params[:query]
+    @lists = @user.lists.where("name LIKE ?", "%#{@query}%")
   end
 
   def new
@@ -54,5 +55,9 @@ class ListsController < ApplicationController
 
   def list_params
     params.require(:list).permit(:name, items_attributes: [:id, :name, :checked])
+  end
+
+  def search_params
+    params.permit(:query)
   end
 end
