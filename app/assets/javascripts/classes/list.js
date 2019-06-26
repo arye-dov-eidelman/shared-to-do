@@ -75,6 +75,49 @@ class List {
         return csrfElement.content
     };
 
+    formHTML() {
+        this.saved ? this.editFormHTML : this.newFormHTML
+    }
+
+    newFormHTML() {
+        return `
+            <form class="new_list" id="new_list" action="${this.saveActionURL()}" accept-charset="UTF-8" method="post">
+            <input name="utf8" type="hidden" value="&#x2713;" />
+                <div class="list-name pa2 ma2">
+                    <label for="list_name">List name</label>
+                    <input required="required" type="text" name="list[name]" id="list_name" />
+                </div>
+
+                ${this.items.map((item, index) => item.formHTML(index)).join("")}
+
+                <div class="list-submit pa2 ma2">
+                    <input type="submit" name="commit" value="Create List" data-disable-with="Create List" />
+                </div>
+            </form>
+        `
+    }
+
+    editFormHTML() {
+        return `
+            <form class="edit_list" id="edit_list_${this.id}" action="${this.saveActionURL()}" accept-charset="UTF-8" method="post">
+                <input name="utf8" type="hidden" value="&#x2713;" />
+                <input type="hidden" name="_method" value="${this.saveMethod()}" />
+
+                <div class="list-name pa2 ma2">
+                    <label for="list_name">List name</label>
+                    <input required="required" type="text" value="${this.name}" name="list[name]" id="list_name" />
+                </div>
+
+                ${this.items.map((item, index) => item.formHTML(index)).join("")}
+
+                <div class="list-submit pa2 ma2">
+                    <input type="submit" name="commit" value="Update List" data-disable-with="Update List" />
+                </div>
+
+            </form>
+        `
+    }
+
     render() {
 
     };
