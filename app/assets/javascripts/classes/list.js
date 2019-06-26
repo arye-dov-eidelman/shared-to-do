@@ -37,8 +37,8 @@ class List {
     };
 
     async save() {
-        let request = await new Request(this.url(), {
-            method: "POST",
+        let request = await new Request(this.saveActionURL(), {
+            method: this.saveMethod(),
             headers: {
                 "Accepts": "application/json",
                 "Content-Type": "application/json",
@@ -61,13 +61,11 @@ class List {
 
     };
 
-    url() {
-        if (this.id instanceof Number) {
-            return `/lists/${this.id}/`
-        } else {
-            return "/lists/"
-        }
-    };
+    saved() { return (this.id instanceof Number) };
+
+    saveActionURL() { return this.saved ? `/lists/${this.id}/` : "/lists/" };
+
+    saveMethod() { return this.saved ? "PATCH" : "POST" };
 
     token() {
         let csrfElement = document.getElementsByName("csrf-token")[0]
