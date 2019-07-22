@@ -15,28 +15,29 @@ The goal is to add dynamic features to your previous Rails application that are 
   
     > What model and method will there be?
     >
-    >______
+    > Model: List
+    > method: addItem()
 
 2. Must render at least one index page (index resource - 'list of things') via JavaScript and an Active Model Serialization JSON Backend.
 
     > What index page will be rendered with js?
     >
-    >______
+    > Lists index page.
 
 3. Must render at least one show page (show resource - 'one specific thing') via JavaScript and an Active Model Serialization JSON Backend.
 
     > What show page will be rendered with js?
     >
-    >______
+    > List show (/edit) page.
 
 4. Your Rails application must dynamically render on the page at least one serialized 'has_many' relationship through JSON using JavaScript.
 
     > What show page item will render a has-many items with js?
     >
-    >______
+    > List show (/edit) page will render list items.
 
 5. Must use your Rails application to render a form, for creating a resource, that is submitted dynamically, and displayed through JavaScript, and JSON, without a page refresh.
 
     > What form will be submitted dynamically and displayed dynamically without a page refresh
     >
-    >______
+    > List edit page
