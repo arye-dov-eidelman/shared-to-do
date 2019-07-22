@@ -4,7 +4,17 @@ class ListsController < ApplicationController
 
   def index
     @query = search_params[:query]
-    @lists = @user.lists.where("name LIKE ?", "%#{@query}%")
+    @lists = @user.lists
+      .where("name LIKE ?", "%#{@query}%")
+      .order(updated_at: :desc)
+
+    respond_to do |format|
+      format.html {}
+
+      format.json do
+        render json: @lists, each_serializer: Lists::IndexSerializer
+      end
+    end
   end
 
   def new
