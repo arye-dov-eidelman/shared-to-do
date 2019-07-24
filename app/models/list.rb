@@ -5,19 +5,25 @@ class List < ApplicationRecord
   has_many :users, through: :lists_users
   validates :name, presence: true, length: { in: 1..100 }
 
-  accepts_nested_attributes_for :items
-
-  before_validation :delete_empty_items
-  before_save :add_owner_to_users
-
-  def delete_empty_items
-    items.each do |item|
-      item.destroy if item.name.blank?
-    end
-  end
+  before_update :add_owner_to_users
 
   def add_owner_to_users
     lists_users.find_by(user: owner, list: self) || lists_users.build(user: owner, list: self)
+  end
+
+  def items_attributes=(items_attributes)
+    self.items.destroy_all
+    items_attributes.each do |i, item_attributes|
+
+      # handle actual arrays (as opposed to hashes {"1": { ... }, "2": { ... }})
+      if item_attributes == nil
+        item_attributes = i
+      end
+
+      if item_attributes[:name].present?
+        self.items.build(item_attributes).save
+      end
+    end
   end
 
   # scope :shared,     -> { where(id: ListsUser.shared_list_ids) }

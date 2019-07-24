@@ -41,9 +41,15 @@ class ListsController < ApplicationController
 
   def update
     if @list.update(list_params)
-      redirect_to @list
+      respond_to do |format|
+        format.html { redirect_to @list }
+        format.json { render json: @list, serializer: Lists::ShowSerializer }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render status: 422 }
+      end
     end
   end
 
