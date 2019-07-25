@@ -14,7 +14,7 @@ class List {
     return this
   };
 
-  findForm() {
+  connectForm() {
     if (!this.form) {
       this.form = document.getElementsByClassName("new_list")[0]
     }
@@ -22,21 +22,27 @@ class List {
     if (!this.form) {
       this.form = document.getElementsByClassName("edit_list")[0]
     }
-
+    if (!this.form) {
+      list = undefined
+      return false
+    }
+    
+    this.importFormData()
+    this.addFormHandlers()
+    
     return this
   }
-
-  setFromForm() {
-    this.findForm()
+  
+  importFormData() {
     if (!this.form) {
       return false
     }
-
+    
     let id = Number(this.form.action.split("/").pop())
     if (id > 0) {
       this.id = id
     }
-
+    
     this.name = document.getElementById("list_name").value
     this.items = [...this.form.getElementsByClassName("list-item")].map(itemElement => {
       return {
@@ -44,6 +50,8 @@ class List {
         name: itemElement.querySelector("input[type=text]").value
       }
     })
+
+    this.lastSaveTimeElement = this.form.getElementsByClassName("last-save-time")[0]
 
     return this
   }
@@ -56,7 +64,7 @@ class List {
     }
     await e.preventDefault()
 
-    await this.setFromForm()
+    await this.importFormData()
     console.log("Saving...", this.data())
 
     let response = await fetch(
@@ -82,6 +90,7 @@ class List {
     let json = await response.json()
 
     await this.bulkSet(json);
+    this.updateLastSaveTime()
     await console.log("Saved", this)
     return this
   }
@@ -112,6 +121,30 @@ class List {
       }
       return csrfElement.content
   };
+
+  lastSaveTime() {
+    return moment(this.updatedAt).fromNow()
+  }
+
+  updateLastSaveTime(repeat = true) {
+    if (this.updatedAt){
+      this.lastSaveTimeElement.innerHTML = `Last saved ${this.lastSaveTime()}`
+    }
+    if (repeat){
+      setTimeout(this.updateLastSaveTime.bind(this), 5000, true)
+    }
+  }
+
+  addFormHandlers() {
+    this.form.addEventListener("submit", e => this.save(e))
+    if (this.persisted()){
+      this.updateLastSaveTime()
+    }
+  }
+
+
+
+
 
   // Static (class) methods below
 
@@ -187,7 +220,7 @@ class List {
 
 }
 
-List.attributes = ["id", "name", "items", "ownerName", "isShared", "updatedAt", "form"];
+List.attributes = ["id", "name", "items", "ownerName", "isShared", "updatedAt", "form", "lastSaveTimeElement"];
 List.all = [];
 
 document.addEventListener("turbolinks:load", () => {
@@ -203,11 +236,7 @@ document.addEventListener("turbolinks:load", () => {
   }
 
   list = new List()
-  list.findForm()
-  if (list.form) {
-    list.setFromForm()
-    list.form.addEventListener("submit", e => list.save(e))
-  }
+  list.connectForm()
 
 
 
