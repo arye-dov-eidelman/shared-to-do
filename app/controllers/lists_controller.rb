@@ -8,6 +8,9 @@ class ListsController < ApplicationController
       .where("name LIKE ?", "%#{@query}%")
       .order(updated_at: :desc)
 
+    @list = List.new
+    add_empty_list_items
+
     respond_to do |format|
       format.html {}
 
@@ -32,7 +35,13 @@ class ListsController < ApplicationController
   end
 
   def show
-    add_empty_list_items
+    respond_to do |format|
+      format.html {add_empty_list_items}
+
+      format.json do
+        render json: @list, serializer: Lists::ShowSerializer
+      end
+    end
   end
 
   def edit

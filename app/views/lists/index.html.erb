@@ -1,17 +1,24 @@
 
-<h2 class="pa2 mh2">Lists</h2>
+<div class="flex">
+  <div id="lists-area">
+    <h2 class="pa2 mh2">Lists</h2>
 
-<div class="pv1 mv1 ph2 mh2">
-  <%= link_to 'New List', new_list_path %>
-</div>
+    <div class="pv1 mv1 ph2 mh2">
+      <%= link_to 'New List', new_list_path %>
+    </div>
 
-<%= form_with url: lists_path, method: :get, local: true, class: "search_form" do |f| %>
-  <div class="pa2 ma2">
-    <%= f.text_field :query, value: @query %>
-    <%= f.submit "Search" %>
+    <%= form_with url: lists_path, method: :get, local: true, class: "search_form" do |f| %>
+      <div class="pa2 ma2">
+        <%= f.text_field :query, value: @query %>
+        <%= f.submit "Search" %>
+      </div>
+    <% end %>
+
+    <div id="lists" class="pa2 ma2">
+      Loading...
+    </div>
   </div>
-<% end %>
 
-<div id="lists">
-  Loading...
+  <div id="list-area">
+  </div>
 </div>

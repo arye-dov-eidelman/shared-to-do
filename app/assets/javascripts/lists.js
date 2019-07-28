@@ -2,6 +2,7 @@ class List {
 
   constructor(data) {
     this.bulkSet(data);
+    this.keepLastSaveMessageCurrent()
     return this
   };
 
@@ -14,35 +15,41 @@ class List {
     return this
   };
 
-  connectForm() {
-    if (!this.form) {
-      this.form = document.getElementsByClassName("new_list")[0]
-    }
+  findForm(){
+    this.form = document.getElementsByClassName("new_list")[0]
 
     if (!this.form) {
       this.form = document.getElementsByClassName("edit_list")[0]
     }
     if (!this.form) {
-      list = undefined
       return false
     }
-    
+    this.lastSaveTimeElement = this.form.getElementsByClassName("last-save-time")[0]
+
+  }
+
+  connectForm() {
+    this.findForm()
+    if (!this.form) {
+      return false
+    }
+
     this.importFormData()
     this.addFormHandlers()
-    
+
     return this
   }
-  
+
   importFormData() {
     if (!this.form) {
       return false
     }
-    
+
     let id = Number(this.form.action.split("/").pop())
     if (id > 0) {
       this.id = id
     }
-    
+
     this.name = document.getElementById("list_name").value
     this.items = [...this.form.getElementsByClassName("list-item")].map(itemElement => {
       return {
@@ -50,8 +57,6 @@ class List {
         name: itemElement.querySelector("input[type=text]").value
       }
     })
-
-    this.lastSaveTimeElement = this.form.getElementsByClassName("last-save-time")[0]
 
     return this
   }
@@ -81,17 +86,50 @@ class List {
     );
 
     if (!response.ok) {
-      console.error(`Error ${response.status} saving list`, response)
-      throw Error(`Error ${response.status} saving list`)
+      console.error(`Error ${response.status} saving list ${this.id}`, response)
+      throw Error(`Error ${response.status} saving list ${this.id}`)
+    } else {
+      console.log("Saved", this)
     }
 
     document.querySelector("input[type=submit]").disabled = false
 
     let json = await response.json()
+    await this.bulkSet(json);
+
+    this.render()
+    return this
+  }
+
+  async load() {
+    if (!this.persisted()){
+      return
+      // only saved lists can be loaded!
+    }
+    console.log(`Loading list ${this.id}...`)
+
+    let response = await fetch(
+      this.formAction(),
+      {
+        method: "GET",
+        headers: {
+          "Accepts": "application/json",
+          "Content-Type": "application/json",
+          "X-CSRF-Token": this.csrfToken()
+        }
+      }
+    );
+
+    if (!response.ok) {
+      console.error(`Error ${response.status} loading list ${this.id}`, response)
+      throw Error(`Error ${response.status} loading list ${this.id}`)
+    }
+
+    let json = await response.json()
 
     await this.bulkSet(json);
-    this.updateLastSaveTime()
-    await console.log("Saved", this)
+    console.log(`Loaded list ${this.id}`, this)
+
     return this
   }
 
@@ -115,31 +153,124 @@ class List {
   };
 
   csrfToken() {
-      let csrfElement = document.getElementsByName("csrf-token")[0]
-      if (!(csrfElement instanceof Object) || !csrfElement.content) {
-          throw "csrf-token not found"
-      }
-      return csrfElement.content
+    let csrfElement = document.getElementsByName("csrf-token")[0]
+    if (!(csrfElement instanceof Object) || !csrfElement.content) {
+      throw "csrf-token not found"
+    }
+    return csrfElement.content
   };
 
   lastSaveTime() {
     return moment(this.updatedAt).fromNow()
   }
 
-  updateLastSaveTime(repeat = true) {
-    if (this.updatedAt){
+  updateLastSaveTime() {
+    if (this.persisted() && this.lastSaveTimeElement){
       this.lastSaveTimeElement.innerHTML = `Last saved ${this.lastSaveTime()}`
     }
-    if (repeat){
-      setTimeout(this.updateLastSaveTime.bind(this), 5000, true)
+  }
+
+  keepLastSaveMessageCurrent() {
+      setTimeout(() => {
+        this.updateLastSaveTime()
+        this.keepLastSaveMessageCurrent()
+      }, 5000, true)
+  }
+
+  formHTML() {
+    return this.persisted() ? this.editFormHTML() : this.newFormHTML()
+  }
+
+  newFormHTML() {
+    return (`
+      <form class="new_list" id="new_list" action="${this.formAction()}" accept-charset="UTF-8" method="post">
+        <div class="list-name pa2 ma2">
+          <label for="list_name">List name</label>
+          <input required="required" type="text" name="list[name]" id="list_name" />
+        </div>
+
+        ${this.items.map(this.formItemHTML).join("")}
+
+        <div class="list-submit pa2 ma2">
+          <input type="submit" name="commit" value="Create List" data-disable-with="Create List" />
+        </div>
+      </form>
+    `)
+  }
+
+  editFormHTML() {
+    return (`
+      <form class="edit_list" id="edit_list_${this.id}" action="${this.formAction()}" accept-charset="UTF-8" method="post">
+        <input type="hidden" name="_method" value="${this.formMethod()}" />
+
+        <div class="list-name pa2 ma2">
+          <label for="list_name">List name</label>
+          <input required="required" type="text" value="${this.name}" name="list[name]" id="list_name" />
+        </div>
+
+        ${this.items.map(this.formItemHTML).join("")}
+
+        <div class="list-submit ma2 pa2 flex items-center">
+          <input
+            type="submit"
+            name="commit"
+            value="Update List"
+            data-disable-with="Update List"
+            class="h2 ma1 pa1"
+          />
+          <div
+            class="last-save-time h2 ma1 pa1"
+            style="border: 2px solid rgba(0, 0, 0, .0)"
+          >
+            Last saved ${this.lastSaveTime()}
+          </div>
+        </div>
+      </form>
+    `)
+  }
+
+  formItemHTML(item, index) {
+    return (`
+      <div class="list-item ph2 mh2 pv1 mv1">
+
+        <span class="checked">
+          <input
+            type="checkbox"
+            ${ item.checked && "checked" }
+            name="list[items_attributes][${ index }][checked]"
+            id="list_items_attributes_${ index }_checked"
+          />
+        </span>
+
+        <span class="name">
+          <input
+            type="text"
+            value="${ item.name }"
+            name="list[items_attributes][${ index }][name]"
+            id="list_items_attributes_${ index }_name"
+          />
+        </span>
+
+      </div>
+    `)
+  }
+
+  render() {
+    if (!this.listArea){
+      this.listArea = document.getElementById("list-area")
+    }
+
+    if (this.listArea) {
+      this.listArea.innerHTML = this.formHTML()
+      this.findForm()
+      if (this.form) {
+        this.addFormHandlers()
+      }
     }
   }
 
   addFormHandlers() {
     this.form.addEventListener("submit", e => this.save(e))
-    if (this.persisted()){
-      this.updateLastSaveTime()
-    }
   }
 
 
@@ -178,14 +309,14 @@ class List {
     }
     return await List.all.map(list => `
       <div class="list flex items-center mh2 mv1 ph2 pv1">
-        <a class="ma2 pa2" href="/lists/${list.id}">${list.name}</a>
-      
+        <a class="ma2 pa2 list-link" href="/lists/${list.id}" data-id="${list.id}">${list.name}</a>
+
         <div class="ma2 pa2">by ${list.ownerName}</div>
-      
+
         <a class="ma2 pa2" href="/lists/${list.id}/users">
           <i class="material-icons">${this.isShared ? "people" : "lock"}</i>
         </a>
-      
+
         <a class="ma2 pa2"
             data-confirm="Are you sure you want to delete the ${list.name} list?"
             rel="nofollow" data-method="delete" href="/lists/${list.id}">
@@ -195,13 +326,26 @@ class List {
     `).join("")
   }
 
-  static async renderAll(element) {
-    let html = await List.allHTML()
-
-    let listsElement = await document.getElementById("lists")
-    if (listsElement) {
-      listsElement.innerHTML = await html
+  static async renderAll() {
+    if (!List.listsElement){
+      List.listsElement = await document.getElementById("lists")
     }
+
+    if (List.listsElement) {
+      let html = await List.allHTML()
+      List.listsElement.innerHTML = html
+      let listsLinks = await [...List.listsElement.getElementsByClassName("list-link")]
+      listsLinks.map(listLink => listLink.addEventListener("click", List.openList))
+    }
+
+  }
+
+  static async openList(e) {
+    await e.preventDefault()
+
+    list = await new List({id: await e.target.dataset.id})
+    await list.load()
+    list.render()
   }
 
   static async searchHandler(e) {
@@ -227,7 +371,7 @@ document.addEventListener("turbolinks:load", () => {
 
   let listsElement = document.getElementById("lists")
   if (listsElement) {
-    List.renderAll(listsElement)
+    List.renderAll()
   }
 
   let searchForm = document.getElementsByClassName("search_form")[0]
@@ -244,7 +388,7 @@ document.addEventListener("turbolinks:load", () => {
 
 
 // Update list params
-// 
+//
 // {
 //   "utf8"=>"✓",
 //   "_method"=>"patch",
@@ -269,7 +413,7 @@ document.addEventListener("turbolinks:load", () => {
 // }
 
 // New list params
-// 
+//
 // {
 //   "utf8"=>"✓",
 //   "authenticity_token"=>"bWxVza9qOWIcRBR0F3oJw2fdnlgZZFwH5J7XZWSV/S0Lcl7gc+YGTO/e7fuM87mziiHuox8k1YJP8D0pjU4fTg==",
