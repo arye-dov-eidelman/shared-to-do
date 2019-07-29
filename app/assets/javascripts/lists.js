@@ -340,10 +340,16 @@ class List {
 
   }
 
-  static async openList(e) {
-    await e.preventDefault()
-
-    list = await new List({id: await e.target.dataset.id})
+  static async editList(e) {
+    if (e instanceof Event){
+      await e.preventDefault()
+      list = await List.all.find(list => list.id == e.target.dataset.id) || new List({id: e.target.dataset.id})
+    } else if (typeof e == "number") {
+      var id = await e
+      list = await List.all.find(list => list.id == id) || new List({id: id})
+    } else if (e instanceof List) {
+      var list = await e
+    }
     await list.load()
     list.render()
   }
