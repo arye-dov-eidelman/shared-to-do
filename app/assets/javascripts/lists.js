@@ -70,6 +70,7 @@ class List {
     await e.preventDefault()
 
     await this.importFormData()
+    List.renderAll()
     console.log("Saving...", this.data())
 
     let response = await fetch(
