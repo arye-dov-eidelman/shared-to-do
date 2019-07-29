@@ -309,16 +309,26 @@ class List {
       let lists = await List.fetchAll()
     }
     return await List.all.map(list => `
-      <div class="list flex items-center mh2 mv1 ph2 pv1">
-        <a class="ma2 pa2 list-link" href="/lists/${list.id}" data-id="${list.id}">${list.name}</a>
+      <div class="list flex items-center shadow-3 br3 ma2 ph3 pv1">
+        <div class="ma2 pa2 flex flex-auto">
+          <div class="pa1 flex-auto">
+            ${list.name}
+          </div>
 
-        <div class="ma2 pa2">by ${list.ownerName}</div>
+          <div class="pa1">
+            by ${list.ownerName}
+          </div>
+        </div>
+
+        <a class="edit ma2 pa2" href="/lists/${list.id}/edit" data-id="${list.id}">
+          <i class="material-icons" data-id="${list.id}">edit</i>
+        </a>
 
         <a class="ma2 pa2" href="/lists/${list.id}/users">
           <i class="material-icons">${this.isShared ? "people" : "lock"}</i>
         </a>
 
-        <a class="ma2 pa2"
+        <a class="delete ma2 pa2"
             data-confirm="Are you sure you want to delete the ${list.name} list?"
             rel="nofollow" data-method="delete" href="/lists/${list.id}">
           <i class="material-icons">delete</i>
@@ -335,8 +345,8 @@ class List {
     if (List.listsElement) {
       let html = await List.allHTML()
       List.listsElement.innerHTML = html
-      let listsLinks = await [...List.listsElement.getElementsByClassName("list-link")]
-      listsLinks.map(listLink => listLink.addEventListener("click", List.openList))
+      let listsEditButtons = await [...List.listsElement.getElementsByClassName("edit")]
+      listsEditButtons.map(listLink => listLink.addEventListener("click", List.editList))
     }
 
   }
