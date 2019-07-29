@@ -12,13 +12,13 @@
   ) %>
 
   <%= link_to(
-    "<i class=\"material-icons\">#{list.shared? ? "people" : "lock"}</i>".html_safe,
+    "<i class=\"material-icons-outlined\">#{list.shared? ? "people" : "lock"}</i>".html_safe,
     list_users_path(list),
     class: "ma2 pa2"
   ) %>
 
   <%= link_to(
-    '<i class="material-icons">delete</i>'.html_safe,
+    '<i class="material-icons-outlined">delete</i>'.html_safe,
     list,
     method: :delete,
     class: "ma2 pa2",

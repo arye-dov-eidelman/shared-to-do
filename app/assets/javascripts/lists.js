@@ -217,10 +217,10 @@ class List {
             name="commit"
             value="Update List"
             data-disable-with="Update List"
-            class="h2 ma1 pa1"
+            class="ma2 pa2 b--none br2"
           />
           <div
-            class="last-save-time h2 ma1 pa1"
+            class="last-save-time ma2 pa2"
             style="border: 2px solid rgba(0, 0, 0, .0)"
           >
             Last saved ${this.lastSaveTime()}
@@ -309,8 +309,8 @@ class List {
       let lists = await List.fetchAll()
     }
     return await List.all.map(list => `
-      <div class="list flex items-center shadow-3 br3 ma2 ph3 pv1">
-        <div class="ma2 pa2 flex flex-auto">
+      <div class="list flex items-center br2 ma2 ph1 pv1 bg-light-green">
+        <div class="ma2 pa2 flex flex-auto br2 bg-washed-green black">
           <div class="pa1 flex-auto">
             ${list.name}
           </div>
@@ -320,18 +320,22 @@ class List {
           </div>
         </div>
 
-        <a class="edit ma2 pa2" href="/lists/${list.id}/edit" data-id="${list.id}">
-          <i class="material-icons" data-id="${list.id}">edit</i>
+        <a class="edit ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}/edit" data-id="${list.id}">
+          <i class="material-icons-outlined" data-id="${list.id}">edit</i>
         </a>
 
-        <a class="ma2 pa2" href="/lists/${list.id}/users">
-          <i class="material-icons">${this.isShared ? "people" : "lock"}</i>
+        <a class="ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}/users">
+          <i class="material-icons-outlined">${list.isShared ? "people" : "lock"}</i>
         </a>
 
-        <a class="delete ma2 pa2"
+        <a class="ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}">
+          <i class="material-icons-outlined">link</i>
+        </a>
+
+        <a class="delete ma2 pa2 br2 bg-washed-green black"
             data-confirm="Are you sure you want to delete the ${list.name} list?"
             rel="nofollow" data-method="delete" href="/lists/${list.id}">
-          <i class="material-icons">delete</i>
+          <i class="material-icons-outlined">delete</i>
         </a>
       </div>
     `).join("")
@@ -346,7 +350,7 @@ class List {
       let html = await List.allHTML()
       List.listsElement.innerHTML = html
       let listsEditButtons = await [...List.listsElement.getElementsByClassName("edit")]
-      listsEditButtons.map(listLink => listLink.addEventListener("click", List.editList))
+      listsEditButtons.map(listEditButton => listEditButton.addEventListener("click", List.editList))
     }
 
   }

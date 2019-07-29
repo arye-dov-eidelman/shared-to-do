@@ -2,9 +2,9 @@
 <div class="flex">
   <div id="lists-area">
     <%= form_with url: lists_path, method: :get, local: true, class: "search_form" do |f| %>
-      <div class="pa2 ma2">
-        <%= f.text_field :query, value: @query %>
-        <%= f.submit "Search" %>
+      <div class="pa2 ma2 bg-light-green flex br2">
+        <%= f.text_field :query, value: @query, class: "flex-auto ma2 pa2 b--none bg-washed-green br2" %>
+        <%= f.submit "Search", class: "ma2 pa2 b--none bg-washed-green br2" %>
       </div>
     <% end %>
 
