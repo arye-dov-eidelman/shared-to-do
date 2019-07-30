@@ -309,8 +309,8 @@ class List {
       let lists = await List.fetchAll()
     }
     return await List.all.map(list => `
-      <div class="list flex items-center br2 ma2 ph1 pv1 bg-light-green">
-        <div class="ma2 pa2 flex flex-auto br2 bg-washed-green black">
+      <div class="list flex items-center br2 ma2 ph1 pv1 bg-white">
+        <div class="ma2 pa2 flex flex-auto br2 black">
           <div class="pa1 flex-auto">
             ${list.name}
           </div>
@@ -320,19 +320,19 @@ class List {
           </div>
         </div>
 
-        <a class="edit ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}/edit" data-id="${list.id}">
+        <a class="edit ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}/edit" data-id="${list.id}">
           <i class="material-icons-outlined" data-id="${list.id}">edit</i>
         </a>
 
-        <a class="ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}/users">
+        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}/users">
           <i class="material-icons-outlined">${list.isShared ? "people" : "lock"}</i>
         </a>
 
-        <a class="ma2 pa2 br2 bg-washed-green black" href="/lists/${list.id}">
+        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}">
           <i class="material-icons-outlined">link</i>
         </a>
 
-        <a class="delete ma2 pa2 br2 bg-washed-green black"
+        <a class="delete ma2 pa2 w-px-40 h-px-40 br-pill hover-bg-black-20 black"
             data-confirm="Are you sure you want to delete the ${list.name} list?"
             rel="nofollow" data-method="delete" href="/lists/${list.id}">
           <i class="material-icons-outlined">delete</i>
