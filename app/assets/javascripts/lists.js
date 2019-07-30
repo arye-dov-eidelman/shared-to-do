@@ -25,6 +25,7 @@ class List {
       return false
     }
     this.lastSaveTimeElement = this.form.getElementsByClassName("last-save-time")[0]
+    this.addItemButton = this.form.getElementsByClassName("add-item-button")[0]
 
   }
 
@@ -98,6 +99,13 @@ class List {
     let json = await response.json()
     await this.bulkSet(json);
 
+    this.render()
+    return this
+  }
+
+  async addFormItem(e) {
+    await this.importFormData()
+    await this.items.push({name: "", checked: false})
     this.render()
     return this
   }
@@ -211,13 +219,17 @@ class List {
 
         ${this.items.map(this.formItemHTML).join("")}
 
+        <button class="add-item-button">
+          Add item
+        </button>
+
         <div class="list-submit ma2 pa2 flex items-center">
           <input
             type="submit"
             name="commit"
             value="Save"
             data-disable-with="Saving..."
-            class="ma2 pa2 b--none br2"
+            class="pa2 black bg-white hover-bg-black-20 no-underline b--none br2"
           />
           <div
             class="last-save-time ma2 pa2"
@@ -272,6 +284,7 @@ class List {
 
   addFormHandlers() {
     this.form.addEventListener("submit", e => this.save(e))
+    this.addItemButton.addEventListener("click", e => this.addFormItem(e))
   }
 
 
@@ -383,6 +396,22 @@ class List {
     document.querySelector("input[type=submit]").disabled = false
   }
 
+  static sortBy(option){
+    List.all = List.all.sort((a, b) => {
+      let aValue, bValue
+
+      if (option === "name"){
+        aValue = a.name
+        bValue = b.name
+      } else if (option === "most-recent"){
+        aValue = -Number(new Date(a.updatedAt))
+        bValue = -Number(new Date(b.updatedAt))
+      }
+      return aValue < bValue ? -1 : (aValue > bValue ? 1 : 0)
+    })
+
+    List.renderAll()
+  }
 }
 
 List.attributes = ["id", "name", "items", "ownerName", "isShared", "updatedAt", "form", "lastSaveTimeElement"];
@@ -399,6 +428,11 @@ document.addEventListener("turbolinks:load", () => {
   if (searchForm) {
     searchForm.addEventListener("submit", List.searchHandler)
   }
+
+  let sortByButtons = [...document.getElementsByClassName("sort-by-button")]
+  sortByButtons.forEach(button => button.addEventListener("click", e => {
+    List.sortBy(e.target.dataset.sortMethod)
+  }))
 
   list = new List()
   list.connectForm()

@@ -2,13 +2,21 @@
 <div class="flex">
   <div id="lists-area">
     <%= form_with url: lists_path, method: :get, local: true, class: "search_form" do |f| %>
-      <div class="pa2 ma2 bg-white flex br2">
-        <%= f.text_field :query, value: @query, class: "flex-auto ma2 pa2 b--none bg-black-10 br-pill" %>
-        <button type="submit" class="w-px-40 h-px-40 ma2 pa2 b--none bg-white hover-bg-black-20 br-100">
+      <div class="bg-white br-pill flex ma3">
+        <%= f.text_field :query, value: @query, class: "b--none br-pill flex-auto pa2" %>
+        <button type="submit" class="w-px-40 h-px-40 ma2 pa2 b--none bg-white hover-bg-black-20 br-pill">
           <i class="material-icons-outlined">search</i>
         </button>
       </div>
     <% end %>
+
+    <button data-sort-method="name" class="sort-by-button ma2 pa2 b--none bg-white hover-bg-black-20 br-pill">
+      Sort By Name
+    </button>
+
+    <button data-sort-method="most-recent" class="sort-by-button ma2 pa2 b--none bg-white hover-bg-black-20 br-pill">
+      Sort By Most Recent
+    </button>
 
     <h2 class="pa2 mh2">Lists</h2>
 
