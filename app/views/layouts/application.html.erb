@@ -14,24 +14,29 @@
   </head>
 
   <body class="bg-black-05">
-    <header class="pa2 ma2">
-      <h1>
+    <header class="pa2 shadow-2 bg-white flex items-baseline flex-column flex-row-ns">
+      <h1 class="pa2 ma2">
         Shared To Do
       </h1>
-      <nav>
+      <nav class="ma1 pa1">
         <% if @logged_in %>
-          <%= link_to "Lists", lists_path %>
+
+          <%= link_to "Lists", lists_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
           &nbsp;
-          <%= link_to "Account", user_path(@user) %>
+
+          <%= link_to "Account", user_path(@user), class:"pa2 black hover-bg-black-20 no-underline br2" %>
           &nbsp;
-          <%= link_to "Log Out", sessions_path, method: :delete %>
+
+          <%= link_to "Log Out", sessions_path, method: :delete, class:"pa2 black hover-bg-black-20 no-underline br2" %>
+
         <% else %>
-          <%= link_to "Log In", new_sessions_path %>
+          <%= link_to "Log In", new_sessions_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
           &nbsp;
-          <%= link_to "Sign Up", new_user_path %>
+
+          <%= link_to "Sign Up", new_user_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
+
         <% end %>
       </nav>
-      <hr>
     </header>
     <%= yield %>
   </body>

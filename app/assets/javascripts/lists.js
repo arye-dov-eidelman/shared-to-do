@@ -215,8 +215,8 @@ class List {
           <input
             type="submit"
             name="commit"
-            value="Update List"
-            data-disable-with="Update List"
+            value="Save"
+            data-disable-with="Saving..."
             class="ma2 pa2 b--none br2"
           />
           <div
@@ -379,7 +379,7 @@ class List {
     }
 
     await List.fetchAll(query)
-    await List.renderAll()
+    List.renderAll()
     document.querySelector("input[type=submit]").disabled = false
   }
 
