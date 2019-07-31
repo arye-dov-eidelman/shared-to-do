@@ -268,6 +268,44 @@ class List {
     `)
   }
 
+  indexRowHTML(){
+    return (`
+      <div class="list flex items-center br2 ma2 ph1 pv1 bg-white">
+        <div class="ma2 pa2 flex flex-auto br2 black">
+          <div class="pa1 flex-auto">
+            ${this.name}
+          </div>
+
+          <div class="pa1">
+            by ${this.ownerName}
+          </div>
+        </div>
+
+        <a
+          class="edit ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black"
+          href="/lists/${this.id}/edit"
+          data-id="${this.id}"
+        >
+          <i class="material-icons-outlined" data-id="${this.id}">edit</i>
+        </a>
+
+        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${this.id}/users">
+          <i class="material-icons-outlined">${this.isShared ? "people" : "lock"}</i>
+        </a>
+
+        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${this.id}">
+          <i class="material-icons-outlined">link</i>
+        </a>
+
+        <a class="delete ma2 pa2 w-px-40 h-px-40 br-pill hover-bg-black-20 black"
+            data-confirm="Are you sure you want to delete the ${this.name} list?"
+            rel="nofollow" data-method="delete" href="/lists/${this.id}">
+          <i class="material-icons-outlined">delete</i>
+        </a>
+      </div>
+    `)
+  }
+
   render() {
     if (!this.listArea){
       this.listArea = document.getElementById("list-area")
@@ -321,37 +359,7 @@ class List {
     if (List.all.length === 0) {
       let lists = await List.fetchAll()
     }
-    return await List.all.map(list => `
-      <div class="list flex items-center br2 ma2 ph1 pv1 bg-white">
-        <div class="ma2 pa2 flex flex-auto br2 black">
-          <div class="pa1 flex-auto">
-            ${list.name}
-          </div>
-
-          <div class="pa1">
-            by ${list.ownerName}
-          </div>
-        </div>
-
-        <a class="edit ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}/edit" data-id="${list.id}">
-          <i class="material-icons-outlined" data-id="${list.id}">edit</i>
-        </a>
-
-        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}/users">
-          <i class="material-icons-outlined">${list.isShared ? "people" : "lock"}</i>
-        </a>
-
-        <a class="ma2 pa2 br-pill w-px-40 h-px-40 hover-bg-black-20 black" href="/lists/${list.id}">
-          <i class="material-icons-outlined">link</i>
-        </a>
-
-        <a class="delete ma2 pa2 w-px-40 h-px-40 br-pill hover-bg-black-20 black"
-            data-confirm="Are you sure you want to delete the ${list.name} list?"
-            rel="nofollow" data-method="delete" href="/lists/${list.id}">
-          <i class="material-icons-outlined">delete</i>
-        </a>
-      </div>
-    `).join("")
+    return await List.all.map(list => list.indexRowHTML()).join("")
   }
 
   static async renderAll() {
