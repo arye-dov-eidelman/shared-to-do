@@ -18,22 +18,22 @@
       <h1 class="pa2 ma2">
         Shared To Do
       </h1>
+
+      <% nav_item_styles = "white-space: nowrap; display: inline-block;"%>
+      <% nav_item_classes = "pa2 black hover-bg-black-20 no-underline br2 inline-block" %>
       <nav class="ma1 pa1">
         <% if @logged_in %>
 
-          <%= link_to "Lists", lists_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
-          &nbsp;
+          <%= link_to "Lists", lists_path, class: nav_item_classes, style: nav_item_styles %>
 
-          <%= link_to "Account", user_path(@user), class:"pa2 black hover-bg-black-20 no-underline br2" %>
-          &nbsp;
+          <%= link_to "Account", user_path(@user), class: nav_item_classes, style: nav_item_styles %>
 
-          <%= link_to "Log Out", sessions_path, method: :delete, class:"pa2 black hover-bg-black-20 no-underline br2" %>
+          <%= link_to "Log Out", sessions_path, method: :delete, class: nav_item_classes, style: nav_item_styles %>
 
         <% else %>
-          <%= link_to "Log In", new_sessions_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
-          &nbsp;
+          <%= link_to "Log In", new_sessions_path, class: nav_item_classes, style: nav_item_styles %>
 
-          <%= link_to "Sign Up", new_user_path, class:"pa2 black hover-bg-black-20 no-underline br2" %>
+          <%= link_to "Sign Up", new_user_path, class: nav_item_classes, style: nav_item_styles %>
 
         <% end %>
       </nav>

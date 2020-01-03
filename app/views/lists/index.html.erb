@@ -4,7 +4,7 @@
     <%= form_with url: lists_path, method: :get, local: true, class: "search_form" do |f| %>
       <div class="bg-white br-pill flex ma3">
         <%= f.text_field :query, value: @query, class: "b--none br-pill flex-auto pa2" %>
-        <button type="submit" class="w-px-40 h-px-40 ma2 pa2 b--none bg-white hover-bg-black-20 br-pill">
+        <button type="submit" class="w-px-40 h-px-40 pa2 b--none bg-white hover-bg-black-20 br-pill">
           <i class="material-icons-outlined">search</i>
         </button>
       </div>
