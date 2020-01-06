@@ -12,8 +12,8 @@ git clone git@github.com:arye-dov-eidelman/shared-to-do.git
 cd shared-to-do
 
 # keep rvm calm
-rvm install "ruby-2.3.8"
-rvm use 2.3.8
+rvm install "ruby-2.5.3"
+rvm use 2.5.3
 
 # bundle gems
 gem install bundler
